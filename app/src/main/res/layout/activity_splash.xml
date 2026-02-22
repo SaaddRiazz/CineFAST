@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Splash"
+    android:background="@color/black">
+
+    <RelativeLayout
+        android:id="@+id/rlLogo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.1"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/container"
+            android:id="@+id/ivContainer"
+            android:contentDescription="@string/logo"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:layout_width="135dp"
+            android:layout_height="135dp"
+            android:src="@drawable/outer"
+            android:id="@+id/ivOuter"
+            android:contentDescription="@string/logo"
+            android:translationX="-5dp"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:src="@drawable/inner"
+            android:id="@+id/ivInner"
+            android:contentDescription="@string/logo"
+            android:translationX="14dp"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/triangle"
+            android:id="@+id/ivTriangle"
+            android:contentDescription="@string/logo"
+            android:translationX="5dp"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llName"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:gravity="center|top"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvCine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="@string/cine"
+            android:textColor="#EE0000"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tvFast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fast"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MovieCardView">
+        <attr name="movieTitle" format="string"/>
+        <attr name="movieInfo" format="string"/>
+        <attr name="moviePoster" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="SnacksCardView">
+        <attr name="itemName" format="string"/>
+        <attr name="itemInfo" format="string"/>
+        <attr name="itemPrice" format="float"/>
+        <attr name="itemPoster" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="SeatButton">
+        <attr name="seatStatus" format="string"/>
+        <attr name="row" format="string"/>
+        <attr name="seatNumber" format="integer"/>
+    </declare-styleable>
+</resources>
