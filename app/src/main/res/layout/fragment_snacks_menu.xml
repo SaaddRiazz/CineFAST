@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home"
     android:orientation="vertical"
     android:background="@color/black">
 
@@ -13,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:layout_marginHorizontal="15dp">
         <TextView
             android:id="@+id/tvCine"
@@ -54,31 +53,11 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="13"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:id="@+id/llSnacksCont"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:text="@string/snacks_drinks"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                android:textStyle="bold"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+        android:id="@+id/lvSnacks"/>
 
     <LinearLayout
         android:layout_width="match_parent"

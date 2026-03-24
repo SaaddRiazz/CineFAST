@@ -88,10 +88,8 @@ public class NowShowingFragment extends Fragment {
         movieAdapter.setOnBookClickListener(movie -> {
             SeatSelectionFragment fragment = new SeatSelectionFragment();
             Bundle args = new Bundle();
-            args.putString("movie_title", movie.getTitle());
-            args.putInt("movie_poster", movie.getPosterId());
-            args.putString("movie_type", movie.getType());
-            args.putString("trailer_link", movie.getTrailerLink());
+            args.putString("movie_title_key", movie.getTitle());
+            args.putInt("movie_poster_key", movie.getPosterId());
             fragment.setArguments(args);
             ((MainActivity) requireActivity()).loadFragment(fragment, true);
         });

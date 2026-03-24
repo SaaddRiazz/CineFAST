@@ -86,8 +86,8 @@ public class SeatSelectionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments() != null) {
-            movieTitle  = getArguments().getString("movie_title");
-            moviePoster = getArguments().getInt("movie_poster");
+            movieTitle = getArguments().getString("movie_title_key");
+            moviePoster = getArguments().getInt("movie_poster_key");
         }
 
         init(view);
@@ -99,16 +99,19 @@ public class SeatSelectionFragment extends Fragment {
         bBookConfirm = view.findViewById(R.id.bBookConfirm);
         bSnacks = view.findViewById(R.id.bSnacks);
 
+        TextView tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
+        tvMovieTitle.setText(movieTitle);
+
         bSnacks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), SnacksMenu.class);
-
-                i.putExtra("movie_title_key", movieTitle);
-                i.putExtra("movie_poster_key", moviePoster);
-                i.putExtra("selected_seats_key", selectedSeats);
-
-                startActivity(i);
+                SnacksMenuFragment fragment = new SnacksMenuFragment();
+                Bundle args = new Bundle();
+                args.putString("movie_title_key", movieTitle);
+                args.putInt("movie_poster_key", moviePoster);
+                args.putStringArrayList("selected_seats_key", selectedSeats);
+                fragment.setArguments(args);
+                ((MainActivity) requireActivity()).loadFragment(fragment, true);
             }
         });
 
