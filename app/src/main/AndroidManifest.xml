@@ -18,9 +18,6 @@
             android:name=".SnacksMenu"
             android:exported="false" />
         <activity
-            android:name=".SeatSelection"
-            android:exported="false" />
-        <activity
             android:name=".Onboarding"
             android:exported="false" />
         <activity

@@ -85,10 +85,7 @@ public class ComingSoonFragment extends Fragment {
     private MovieAdapter getMovieAdapter(ArrayList<Movie> movies) {
         MovieAdapter movieAdapter = new MovieAdapter(movies);
         movieAdapter.setOnBookClickListener(movie -> {
-            Intent i = new Intent(getContext(), SeatSelection.class);
-            i.putExtra("movie_title_key", movie.getTitle());
-            i.putExtra("movie_poster_key", movie.getPosterId());
-            startActivity(i);
+
         });
 
         movieAdapter.setOnTrailerClickListener(movie -> {

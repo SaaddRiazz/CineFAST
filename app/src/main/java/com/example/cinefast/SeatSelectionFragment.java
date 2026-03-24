@@ -3,73 +3,106 @@ package com.example.cinefast;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Pair;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-public class SeatSelection extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link SeatSelectionFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class SeatSelectionFragment extends Fragment {
 
-    private final ArrayList<String> selectedSeats = new ArrayList<>();
-    TextView tvMovieTitle;
-    Button bBack, bBookConfirm, bSnacks;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-    String movieTitle;
-    int moviePoster;
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_seat_selection);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        init();
-        generateSeats();
-
-        Intent i = getIntent();
-        movieTitle = i.getStringExtra("movie_title_key");
-        moviePoster = i.getIntExtra("movie_poster_key", -1);
-
-        tvMovieTitle.setText(movieTitle);
+    public SeatSelectionFragment() {
+        // Required empty public constructor
     }
 
-    private void init(){
-        tvMovieTitle = findViewById(R.id.tvMovieTitle);
-        bBack=findViewById(R.id.bBack);
-        bBookConfirm=findViewById(R.id.bBookConfirm);
-        bSnacks=findViewById(R.id.bSnacks);
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SeatSelectionFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static SeatSelectionFragment newInstance(String param1, String param2) {
+        SeatSelectionFragment fragment = new SeatSelectionFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
-        bBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_seat_selection, container, false);
+    }
+
+    private final ArrayList<String> selectedSeats = new ArrayList<>();
+
+    private Button bBack, bBookConfirm, bSnacks;
+
+    private String movieTitle;
+    private int moviePoster;
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getArguments() != null) {
+            movieTitle  = getArguments().getString("movie_title");
+            moviePoster = getArguments().getInt("movie_poster");
+        }
+
+        init(view);
+        generateSeats(view);
+    }
+
+    private void init(View view) {
+        bBack = view.findViewById(R.id.bBack);
+        bBookConfirm = view.findViewById(R.id.bBookConfirm);
+        bSnacks = view.findViewById(R.id.bSnacks);
 
         bSnacks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(SeatSelection.this, SnacksMenu.class);
+                Intent i = new Intent(getContext(), SnacksMenu.class);
 
                 i.putExtra("movie_title_key", movieTitle);
                 i.putExtra("movie_poster_key", moviePoster);
@@ -82,7 +115,7 @@ public class SeatSelection extends AppCompatActivity {
         bBookConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(SeatSelection.this, Booking.class);
+                Intent i = new Intent(getContext(), Booking.class);
 
                 i.putExtra("movie_title_key", movieTitle);
                 i.putExtra("movie_poster_key", moviePoster);
@@ -91,11 +124,18 @@ public class SeatSelection extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        bBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
     }
 
-    private void generateSeats() {
+    private void generateSeats(View view) {
 
-        LinearLayout seatContainer = findViewById(R.id.llSeatsCont);
+        LinearLayout seatContainer = view.findViewById(R.id.llSeatsCont);
         seatContainer.setOrientation(LinearLayout.VERTICAL);
         seatContainer.setGravity(Gravity.CENTER);
 
@@ -107,7 +147,7 @@ public class SeatSelection extends AppCompatActivity {
 
         for (char row = 'H'; row >= 'A'; row--) {
 
-            LinearLayout rowLayout = new LinearLayout(this);
+            LinearLayout rowLayout = new LinearLayout(getContext());
             rowLayout.setOrientation(LinearLayout.HORIZONTAL);
             rowLayout.setGravity(Gravity.CENTER);
 
@@ -124,7 +164,7 @@ public class SeatSelection extends AppCompatActivity {
                 int margin = 1;
                 if(seatNum==seatCount/2)
                     margin = 100;
-                SeatButton seat = new SeatButton(this);
+                SeatButton seat = new SeatButton(getContext());
 
                 LinearLayout.LayoutParams seatParams =
                         new LinearLayout.LayoutParams(seatSize, seatSize);

@@ -1,6 +1,7 @@
 package com.example.cinefast;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.bTrailer.setOnClickListener(v -> {
             trailerListener.onTrailerClick(movie);
         });
+
+        if ("coming_soon".equals(movie.getType())) {
+            holder.bBook.setEnabled(false);
+            holder.bBook.setText("Coming Soon");
+            holder.bBook.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#590909")));
+            holder.bBook.setTextColor(Color.parseColor("#767676"));
+        }
     }
 
     @Override

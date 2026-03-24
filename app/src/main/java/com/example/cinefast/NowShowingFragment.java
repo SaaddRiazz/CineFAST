@@ -86,10 +86,14 @@ public class NowShowingFragment extends Fragment {
     private MovieAdapter getMovieAdapter(ArrayList<Movie> movies) {
         MovieAdapter movieAdapter = new MovieAdapter(movies);
         movieAdapter.setOnBookClickListener(movie -> {
-            Intent i = new Intent(getContext(), SeatSelection.class);
-            i.putExtra("movie_title_key", movie.getTitle());
-            i.putExtra("movie_poster_key", movie.getPosterId());
-            startActivity(i);
+            SeatSelectionFragment fragment = new SeatSelectionFragment();
+            Bundle args = new Bundle();
+            args.putString("movie_title", movie.getTitle());
+            args.putInt("movie_poster", movie.getPosterId());
+            args.putString("movie_type", movie.getType());
+            args.putString("trailer_link", movie.getTrailerLink());
+            fragment.setArguments(args);
+            ((MainActivity) requireActivity()).loadFragment(fragment, true);
         });
 
         movieAdapter.setOnTrailerClickListener(movie -> {
