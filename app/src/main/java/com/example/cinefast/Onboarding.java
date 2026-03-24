@@ -30,7 +30,7 @@ public class Onboarding extends AppCompatActivity {
         getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Onboarding.this, Home.class));
+                startActivity(new Intent(Onboarding.this, MainActivity.class));
                 finish();
             }
         });

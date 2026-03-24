@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home"
     android:orientation="vertical"
     android:background="@color/black">
 
@@ -13,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginHorizontal="15dp">
         <TextView
             android:id="@+id/tvCine"
@@ -41,7 +38,7 @@
         android:layout_weight="2"
         android:orientation="vertical"
         android:layout_marginHorizontal="15dp">
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,55 +77,20 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/tabLayout"
+        app:tabTextColor="#959595"
+        app:tabSelectedTextColor="@color/white"
+        app:tabIndicatorColor="#EE0000"
+        android:background="@color/black"/>
+
+    <androidx.viewpager2.widget.ViewPager2
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="13"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/llMovieContToday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="@string/now_showing"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llMovieContTomorrow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="@string/now_showing"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+        android:id="@+id/viewPager"/>
 
 </LinearLayout>

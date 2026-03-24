@@ -21,9 +21,6 @@
             android:name=".SeatSelection"
             android:exported="false" />
         <activity
-            android:name=".Home"
-            android:exported="false" />
-        <activity
             android:name=".Onboarding"
             android:exported="false" />
         <activity

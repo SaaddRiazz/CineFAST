@@ -7,18 +7,18 @@ public class Movie {
     private String info;
     private int posterId;
     private String trailerLink;
-    private String date;
+    private String type;
 
-    public Movie(String title, String info, int posterId, String trailerLink, String date){
+    public Movie(String title, String info, int posterId, String trailerLink, String type){
         this.title = title;
         this.info = info;
         this.posterId = posterId;
         this.trailerLink = trailerLink;
-        this.date = date;
+        this.type = type;
     }
 
-    public String getDate() {
-        return date;
+    public String getType() {
+        return type;
     }
     public String getTrailerLink() {
         return trailerLink;
