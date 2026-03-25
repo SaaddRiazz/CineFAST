@@ -147,7 +147,14 @@ public class SeatSelectionFragment extends Fragment {
         float density = getResources().getDisplayMetrics().density;
         int seatSize = (int) (36 * density);
 
-        Random random = new Random();
+        int totalSeats = 0;
+        int seatIndex = 0;
+
+        for (char row = 'H'; row >= 'A'; row--) {
+            totalSeats += (row == 'A' || row == 'H') ? 6 : 8;
+        }
+
+        boolean[] bookedStates = ((MainActivity) requireActivity()).getSeatStates(movieTitle, totalSeats);
 
         for (char row = 'H'; row >= 'A'; row--) {
 
@@ -178,7 +185,7 @@ public class SeatSelectionFragment extends Fragment {
                 seat.setRow(String.valueOf(row));
                 seat.setSeatNumber(seatNum);
 
-                boolean isBooked = random.nextInt(100) < 20; // 20% probability
+                boolean isBooked = bookedStates[seatIndex++];
 
                 if (isBooked) {
                     seat.setStatus("booked");

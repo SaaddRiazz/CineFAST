@@ -10,7 +10,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.HashMap;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
+
+    HashMap<String, boolean[]> seatBookingMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +33,17 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.fragmentContainer, fragment);
         if (addToBackStack) ft.addToBackStack(null);
         ft.commit();
+    }
+
+    public boolean[] getSeatStates(String movieTitle, int totalSeats) {
+        if (!seatBookingMap.containsKey(movieTitle)) {
+            boolean[] states = new boolean[totalSeats];
+            Random random = new Random();
+            for (int i = 0; i < totalSeats; i++) {
+                states[i] = random.nextInt(100) < 20;
+            }
+            seatBookingMap.put(movieTitle, states);
+        }
+        return seatBookingMap.get(movieTitle);
     }
 }
