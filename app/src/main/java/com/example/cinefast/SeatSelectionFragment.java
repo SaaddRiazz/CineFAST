@@ -74,7 +74,7 @@ public class SeatSelectionFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_seat_selection, container, false);
     }
 
-    private final ArrayList<String> selectedSeats = new ArrayList<>();
+    private ArrayList<String> selectedSeats;
 
     private Button bBack, bBookConfirm, bSnacks;
 
@@ -95,6 +95,7 @@ public class SeatSelectionFragment extends Fragment {
     }
 
     private void init(View view) {
+        selectedSeats = new ArrayList<>();
         bBack = view.findViewById(R.id.bBack);
         bBookConfirm = view.findViewById(R.id.bBookConfirm);
         bSnacks = view.findViewById(R.id.bSnacks);
@@ -118,13 +119,13 @@ public class SeatSelectionFragment extends Fragment {
         bBookConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(), Booking.class);
-
-                i.putExtra("movie_title_key", movieTitle);
-                i.putExtra("movie_poster_key", moviePoster);
-                i.putExtra("selected_seats_key", selectedSeats);
-
-                startActivity(i);
+                BookingFragment fragment = new BookingFragment();
+                Bundle args = new Bundle();
+                args.putString("movie_title_key", movieTitle);
+                args.putInt("movie_poster_key", moviePoster);
+                args.putStringArrayList("selected_seats_key", selectedSeats);
+                fragment.setArguments(args);
+                ((MainActivity) requireActivity()).loadFragment(fragment, true);
             }
         });
 

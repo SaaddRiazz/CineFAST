@@ -12,12 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CineFAST">
         <activity
-            android:name=".Booking"
-            android:exported="false" />
-        <activity
-            android:name=".SnacksMenu"
-            android:exported="false" />
-        <activity
             android:name=".Onboarding"
             android:exported="false" />
         <activity

@@ -70,8 +70,8 @@ public class SnacksMenuFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_snacks_menu, container, false);
     }
 
-    ArrayList<Snack> snacks = new ArrayList<>();
-    ArrayList<SnacksCardView> selectedSnacks = new ArrayList<>();
+    ArrayList<Snack> snacks;
+    ArrayList<SnacksCardView> selectedSnacks;
     private String movieTitle;
     private int moviePoster;
     private ArrayList<String> selectedSeats;
@@ -87,25 +87,28 @@ public class SnacksMenuFragment extends Fragment {
             selectedSeats = getArguments().getStringArrayList("selected_seats_key");
         }
 
+        snacks = new ArrayList<>();
         snacks.add(new Snack("Popcorn", "Large / Buttered", 8.99f, R.drawable.popcorn));
         snacks.add(new Snack("Nachos", "With Cheese Dip", 7.99f, R.drawable.nachos));
         snacks.add(new Snack("Soft Drinks", "Large / Any Flavor", 5.99f, R.drawable.drinks));
         snacks.add(new Snack("Candy Mix", "Assorted Candies", 6.99f, R.drawable.candy));
 
         ListView lvSnacks = view.findViewById(R.id.lvSnacks);
+
+        selectedSnacks = new ArrayList<>();
         SnackAdapter adapter = new SnackAdapter(requireContext(), snacks, selectedSnacks);
         lvSnacks.setAdapter(adapter);
 
         bBookConfirm = view.findViewById(R.id.bBookConfirm);
         bBookConfirm.setOnClickListener(v -> {
-            Intent i = new Intent(getContext(), Booking.class);
-
-            i.putExtra("movie_title_key", movieTitle);
-            i.putExtra("movie_poster_key", moviePoster);
-            i.putExtra("selected_seats_key", selectedSeats);
-            i.putExtra("selected_snacks_key", formatSnacks());
-
-            startActivity(i);
+            BookingFragment fragment = new BookingFragment();
+            Bundle args = new Bundle();
+            args.putString("movie_title_key", movieTitle);
+            args.putInt("movie_poster_key", moviePoster);
+            args.putStringArrayList("selected_seats_key", selectedSeats);
+            args.putStringArrayList("selected_snacks_key", formatSnacks());
+            fragment.setArguments(args);
+            ((MainActivity) requireActivity()).loadFragment(fragment, true);
         });
     }
 
