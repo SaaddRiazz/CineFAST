@@ -128,6 +128,7 @@ public class BookingFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity main = ((MainActivity) requireActivity());
                 main.finalizeBooking(movieTitle);
+                main.saveLastBooking(movieTitle, selectedSeats.size(), totalPrice);
                 main.selectedSeats.clear();
 
                 Intent intentMail = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+

@@ -1,8 +1,10 @@
 package com.example.cinefast;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -82,5 +84,37 @@ public class MainActivity extends AppCompatActivity {
                 if (states[i].equals("selected")) states[i] = "available";
             }
         }
+    }
+
+    public void saveLastBooking(String movieName, int seatCount, float totalPrice) {
+        SharedPreferences prefs = getSharedPreferences("Last Booking Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("last_movie_name", movieName);
+        editor.putInt("last_seat_count", seatCount);
+        editor.putFloat("last_total_price", totalPrice);
+        editor.apply();
+    }
+
+    public void showLastBookingDialog() {
+        SharedPreferences prefs = getSharedPreferences("Last Booking Preferences", MODE_PRIVATE);
+        String movie = prefs.getString("last_movie_name", null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Last Booking");
+
+        if (movie == null) {
+            builder.setMessage("No previous booking found.");
+        } else {
+            int seats = prefs.getInt("last_seat_count", 0);
+            float price = prefs.getFloat("last_total_price", 0.0f);
+
+            String message = "Movie: " + movie + "\n" +
+                    "Seats: " + seats + "\n" +
+                    "Total Price: $" + String.format("%.2f", price);
+            builder.setMessage(message);
+        }
+
+        builder.setPositiveButton("OK", null);
+        builder.show();
     }
 }

@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -91,5 +93,19 @@ public class HomeFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             tab.setText(position == 0 ? "Now Showing" : "Coming Soon");
         }).attach();
+
+        ImageButton ibMenu = view.findViewById(R.id.ibMenu);
+        ibMenu.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(getContext(), ibMenu);
+            popup.getMenu().add("View Last Booking");
+
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getTitle().equals("View Last Booking")) {
+                    ((MainActivity) requireActivity()).showLastBookingDialog();
+                }
+                return true;
+            });
+            popup.show();
+        });
     }
 }

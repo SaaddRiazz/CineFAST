@@ -30,6 +30,17 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:fontFamily="@font/poppins"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:id="@+id/ibMenu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/black"
+            android:src="@drawable/three_dots_white"
+            app:tint="@color/white"/>
     </LinearLayout>
 
     <LinearLayout
