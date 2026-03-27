@@ -64,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void finalizeBooking(String movieTitle) {
+        String[] states = seatBookingMap.get(movieTitle);
+        if (states != null) {
+            for (int i = 0; i < states.length; i++) {
+                if (states[i].equals("selected")) {
+                    states[i] = "booked";
+                }
+            }
+        }
+    }
+
     public void clearSelectedSeats(String movieTitle) {
         String[] states = seatBookingMap.get(movieTitle);
         if (states != null) {

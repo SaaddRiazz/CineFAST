@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -125,6 +126,10 @@ public class BookingFragment extends Fragment {
         bSendTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity main = ((MainActivity) requireActivity());
+                main.finalizeBooking(movieTitle);
+                main.selectedSeats.clear();
+
                 Intent intentMail = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+
                         "?subject="+
                         "My CineFAST Ticket - "+tvMovieTitle.getText()+
@@ -141,6 +146,10 @@ public class BookingFragment extends Fragment {
                 Intent chooser = Intent.createChooser(targetedIntents.remove(0), "Send Ticket via");
                 chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntents.toArray(new Parcelable[]{}));
                 startActivity(chooser);
+
+                Toast.makeText(main, "Booking Confirmed!", Toast.LENGTH_SHORT).show();
+                main.getSupportFragmentManager().popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                main.loadFragment(new HomeFragment(), false);
             }
         });
     }
