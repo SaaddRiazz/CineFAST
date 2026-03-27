@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     HashMap<String, String[]> seatBookingMap = new HashMap<>();
     ArrayList<String> selectedSeats = new ArrayList<>();
+    ArrayList<SnacksCardView> selectedSnacks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

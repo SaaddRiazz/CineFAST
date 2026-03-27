@@ -71,7 +71,6 @@ public class SnacksMenuFragment extends Fragment {
     }
 
     ArrayList<Snack> snacks;
-    ArrayList<SnacksCardView> selectedSnacks;
     private String movieTitle;
     private int moviePoster;
     private ArrayList<String> selectedSeats;
@@ -95,8 +94,7 @@ public class SnacksMenuFragment extends Fragment {
 
         ListView lvSnacks = view.findViewById(R.id.lvSnacks);
 
-        selectedSnacks = new ArrayList<>();
-        SnackAdapter adapter = new SnackAdapter(requireContext(), snacks, selectedSnacks);
+        SnackAdapter adapter = new SnackAdapter(requireContext(), snacks, ((MainActivity) requireActivity()).selectedSnacks);
         lvSnacks.setAdapter(adapter);
 
         bBookConfirm = view.findViewById(R.id.bBookConfirm);
@@ -114,7 +112,7 @@ public class SnacksMenuFragment extends Fragment {
 
     private ArrayList<String> formatSnacks() {
         ArrayList<String> formatted = new ArrayList<>();
-        for (SnacksCardView scv : selectedSnacks) {
+        for (SnacksCardView scv : ((MainActivity) requireActivity()).selectedSnacks) {
             String s = "x" + scv.getItemQuantity()
                     + " " + scv.getItemName()
                     + " (" + scv.getItemInfo()
@@ -122,5 +120,11 @@ public class SnacksMenuFragment extends Fragment {
             formatted.add(s);
         }
         return formatted;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) requireActivity()).selectedSnacks.clear();
     }
 }

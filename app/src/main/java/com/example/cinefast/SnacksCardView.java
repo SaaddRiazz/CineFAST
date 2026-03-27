@@ -95,6 +95,16 @@ public class SnacksCardView extends LinearLayout {
         });
     }
 
+    public void restoreButtonState() {
+        if (itemQuantity > 0) {
+            bRemoveItem.setEnabled(true);
+            bRemoveItem.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            android.graphics.Color.parseColor("#EE0000")));
+            bRemoveItem.setTextColor(android.graphics.Color.parseColor("#FFFFFF"));
+        }
+    }
+
     public String getItemName() {
         return itemName;
     }

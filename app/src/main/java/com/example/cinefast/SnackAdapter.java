@@ -25,6 +25,15 @@ public class SnackAdapter extends ArrayAdapter<Snack> {
             scv.setItemPrice(snack.getPrice());
             scv.setItemPoster(snack.getPosterId());
 
+            for (int i = 0; i < selectedSnacks.size(); i++) {
+                if (selectedSnacks.get(i).getItemName().equals(snack.getName())) {
+                    scv.setItemQuantity(selectedSnacks.get(i).getItemQuantity());
+                    selectedSnacks.set(i, scv);
+                    scv.restoreButtonState();
+                    break;
+                }
+            }
+
             scv.setOnAddItemClickListener(() -> {
                 scv.setItemQuantity(scv.getItemQuantity() + 1);
                 if (scv.getItemQuantity() == 1) {
