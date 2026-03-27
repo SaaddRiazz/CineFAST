@@ -10,12 +10,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    HashMap<String, boolean[]> seatBookingMap = new HashMap<>();
+    HashMap<String, String[]> seatBookingMap = new HashMap<>();
+    ArrayList<String> selectedSeats = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +37,38 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public boolean[] getSeatStates(String movieTitle, int totalSeats) {
+    public String[] getSeatStates(String movieTitle, int totalSeats) {
         if (!seatBookingMap.containsKey(movieTitle)) {
-            boolean[] states = new boolean[totalSeats];
+            String[] states = new String[totalSeats];
             Random random = new Random();
             for (int i = 0; i < totalSeats; i++) {
-                states[i] = random.nextInt(100) < 20;
+                states[i] = random.nextInt(100) < 20 ? "booked" : "available";
             }
             seatBookingMap.put(movieTitle, states);
         }
         return seatBookingMap.get(movieTitle);
+    }
+
+    public void selectSeat(String movieTitle, int index) {
+        String[] states = seatBookingMap.get(movieTitle);
+        if (states != null && index < states.length) {
+            states[index] = "selected";
+        }
+    }
+
+    public void deselectSeat(String movieTitle, int index) {
+        String[] states = seatBookingMap.get(movieTitle);
+        if (states != null && index < states.length) {
+            states[index] = "available";
+        }
+    }
+
+    public void clearSelectedSeats(String movieTitle) {
+        String[] states = seatBookingMap.get(movieTitle);
+        if (states != null) {
+            for (int i = 0; i < states.length; i++) {
+                if (states[i].equals("selected")) states[i] = "available";
+            }
+        }
     }
 }

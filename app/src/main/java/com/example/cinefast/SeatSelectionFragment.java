@@ -74,8 +74,6 @@ public class SeatSelectionFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_seat_selection, container, false);
     }
 
-    private ArrayList<String> selectedSeats;
-
     private Button bBack, bBookConfirm, bSnacks;
 
     private String movieTitle;
@@ -92,10 +90,10 @@ public class SeatSelectionFragment extends Fragment {
 
         init(view);
         generateSeats(view);
+        updateButtonStates();
     }
 
     private void init(View view) {
-        selectedSeats = new ArrayList<>();
         bBack = view.findViewById(R.id.bBack);
         bBookConfirm = view.findViewById(R.id.bBookConfirm);
         bSnacks = view.findViewById(R.id.bSnacks);
@@ -110,7 +108,7 @@ public class SeatSelectionFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putString("movie_title_key", movieTitle);
                 args.putInt("movie_poster_key", moviePoster);
-                args.putStringArrayList("selected_seats_key", selectedSeats);
+                args.putStringArrayList("selected_seats_key", ((MainActivity) requireActivity()).selectedSeats);
                 fragment.setArguments(args);
                 ((MainActivity) requireActivity()).loadFragment(fragment, true);
             }
@@ -123,7 +121,7 @@ public class SeatSelectionFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putString("movie_title_key", movieTitle);
                 args.putInt("movie_poster_key", moviePoster);
-                args.putStringArrayList("selected_seats_key", selectedSeats);
+                args.putStringArrayList("selected_seats_key", ((MainActivity) requireActivity()).selectedSeats);
                 fragment.setArguments(args);
                 ((MainActivity) requireActivity()).loadFragment(fragment, true);
             }
@@ -154,7 +152,7 @@ public class SeatSelectionFragment extends Fragment {
             totalSeats += (row == 'A' || row == 'H') ? 6 : 8;
         }
 
-        boolean[] bookedStates = ((MainActivity) requireActivity()).getSeatStates(movieTitle, totalSeats);
+        String[] bookedStates = ((MainActivity) requireActivity()).getSeatStates(movieTitle, totalSeats);
 
         for (char row = 'H'; row >= 'A'; row--) {
 
@@ -185,63 +183,34 @@ public class SeatSelectionFragment extends Fragment {
                 seat.setRow(String.valueOf(row));
                 seat.setSeatNumber(seatNum);
 
-                boolean isBooked = bookedStates[seatIndex++];
+                String status = bookedStates[seatIndex++];
+                seat.setStatus(status);
 
-                if (isBooked) {
-                    seat.setStatus("booked");
+                if (Objects.equals(status, "booked"))
                     seat.setImageResource(R.drawable.unavailable_seat);
-                }
-                else {
-                    seat.setStatus("available");
+                else if (Objects.equals(status, "available"))
                     seat.setImageResource(R.drawable.available_seat);
-                }
+                else
+                    seat.setImageResource(R.drawable.your_seat);
 
                 seat.setBackgroundColor(Color.TRANSPARENT);
 
+                int finalSeatIndex = seatIndex - 1;
                 seat.setOnClickListener(v -> {
                     if(Objects.equals(seat.getStatus(), "available")){
+                        ((MainActivity) requireActivity()).selectSeat(movieTitle, finalSeatIndex);
                         seat.setStatus("selected");
                         seat.setImageResource(R.drawable.your_seat);
-                        selectedSeats.add("Row "+seat.getRow()+", Seat "+seat.getSeatNumber());
+                        ((MainActivity) requireActivity()).selectedSeats.add("Row "+seat.getRow()+", Seat "+seat.getSeatNumber());
                     }
                     else if(Objects.equals(seat.getStatus(), "selected")){
+                        ((MainActivity) requireActivity()).deselectSeat(movieTitle, finalSeatIndex);
                         seat.setStatus("available");
                         seat.setImageResource(R.drawable.available_seat);
-                        selectedSeats.remove("Row "+seat.getRow()+", Seat "+seat.getSeatNumber());
+                        ((MainActivity) requireActivity()).selectedSeats.remove("Row "+seat.getRow()+", Seat "+seat.getSeatNumber());
                     }
 
-                    if(!selectedSeats.isEmpty()){
-                        bBookConfirm.setBackgroundTintList(
-                                android.content.res.ColorStateList.valueOf(
-                                        android.graphics.Color.parseColor("#EE0000")
-                                )
-                        );
-                        bBookConfirm.setTextColor(android.graphics.Color.parseColor("#FFFFFF"));
-                        bSnacks.setBackgroundTintList(
-                                android.content.res.ColorStateList.valueOf(
-                                        android.graphics.Color.parseColor("#FFFFFF")
-                                )
-                        );
-
-                        bBookConfirm.setEnabled(true);
-                        bSnacks.setEnabled(true);
-                    }
-                    else{
-                        bBookConfirm.setBackgroundTintList(
-                                android.content.res.ColorStateList.valueOf(
-                                        android.graphics.Color.parseColor("#590909")
-                                )
-                        );
-                        bBookConfirm.setTextColor(android.graphics.Color.parseColor("#767676"));
-                        bSnacks.setBackgroundTintList(
-                                android.content.res.ColorStateList.valueOf(
-                                        android.graphics.Color.parseColor("#474747")
-                                )
-                        );
-
-                        bBookConfirm.setEnabled(false);
-                        bSnacks.setEnabled(false);
-                    }
+                    updateButtonStates();
                 });
 
                 rowLayout.addView(seat);
@@ -249,5 +218,47 @@ public class SeatSelectionFragment extends Fragment {
 
             seatContainer.addView(rowLayout);
         }
+    }
+
+    private void updateButtonStates(){
+        if(!((MainActivity) requireActivity()).selectedSeats.isEmpty()){
+            bBookConfirm.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            android.graphics.Color.parseColor("#EE0000")
+                    )
+            );
+            bBookConfirm.setTextColor(android.graphics.Color.parseColor("#FFFFFF"));
+            bSnacks.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            android.graphics.Color.parseColor("#FFFFFF")
+                    )
+            );
+
+            bBookConfirm.setEnabled(true);
+            bSnacks.setEnabled(true);
+        }
+        else{
+            bBookConfirm.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            android.graphics.Color.parseColor("#590909")
+                    )
+            );
+            bBookConfirm.setTextColor(android.graphics.Color.parseColor("#767676"));
+            bSnacks.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(
+                            android.graphics.Color.parseColor("#474747")
+                    )
+            );
+
+            bBookConfirm.setEnabled(false);
+            bSnacks.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) requireActivity()).clearSelectedSeats(movieTitle);
+        ((MainActivity) requireActivity()).selectedSeats.clear();
     }
 }
