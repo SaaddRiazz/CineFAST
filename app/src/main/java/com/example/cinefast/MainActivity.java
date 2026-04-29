@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home) {
             loadFragment(new HomeFragment(), false);
+            selectedSeats.clear();
+            selectedSnacks.clear();
+            for (String key : seatBookingMap.keySet()) {
+                clearSelectedSeats(key);
+            }
         } else if (id == R.id.nav_bookings) {
             Toast.makeText(this, "Bookings page hai bharosa rakho", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
