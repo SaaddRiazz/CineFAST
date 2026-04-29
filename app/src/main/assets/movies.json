@@ -1,0 +1,44 @@
+[
+  {
+    "title": "The Dark Knight",
+    "info": "Action / 152 mins",
+    "posterName": "the_dark_knight",
+    "trailerLink": "https://youtu.be/EXeTwQWrcwY",
+    "type": "now_showing"
+  },
+  {
+    "title": "Inception",
+    "info": "Sci-Fi / 148 mins",
+    "posterName": "inception",
+    "trailerLink": "https://youtu.be/YoHD9XEInc0",
+    "type": "now_showing"
+  },
+  {
+    "title": "Interstellar",
+    "info": "Sci-Fi / 169 mins",
+    "posterName": "interstellar",
+    "trailerLink": "https://youtu.be/zSWdZVtXT7E",
+    "type": "now_showing"
+  },
+  {
+    "title": "The Shawshank Redemption",
+    "info": "Drama / 142 mins",
+    "posterName": "the_shawshank_redemption",
+    "trailerLink": "https://youtu.be/PLl99DlL6b4",
+    "type": "coming_soon"
+  },
+  {
+    "title": "The Godfather",
+    "info": "Drama / 175 mins",
+    "posterName": "the_godfather",
+    "trailerLink": "https://youtu.be/UaVTIH8mujA",
+    "type": "coming_soon"
+  },
+  {
+    "title": "Dune: Part One",
+    "info": "Sci-Fi / 155 mins",
+    "posterName": "dune",
+    "trailerLink": "https://youtu.be/8g18jFHCLXk",
+    "type": "coming_soon"
+  }
+]

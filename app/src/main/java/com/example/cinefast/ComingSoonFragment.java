@@ -68,11 +68,8 @@ public class ComingSoonFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_coming_soon, container, false);
 
-        ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("The Shawshank Redemption", "Drama / 142 mins", R.drawable.the_shawshank_redemption, "https://youtu.be/PLl99DlL6b4?si=dP0f6w1bhP6BJFiR", "coming_soon"));
-        movies.add(new Movie("The Godfather", "Drama / 175 mins", R.drawable.the_godfather, "https://youtu.be/UaVTIH8mujA?si=AUQOSlEepeIsSVSR", "coming_soon"));
-        movies.add(new Movie("Dune: Part One", "Sci-Fi / 155 mins", R.drawable.dune, "https://youtu.be/8g18jFHCLXk?si=gKmdViARIGwAgZfZ", "coming_soon"));
 
+        ArrayList<Movie> movies = JSONParser.getMoviesFromJson(getContext(), "coming_soon");
         RecyclerView rv = view.findViewById(R.id.rvComingSoon);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 

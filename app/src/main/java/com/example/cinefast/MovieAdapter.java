@@ -50,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = movies.get(position);
         holder.tvTitle.setText(movie.getTitle());
         holder.tvInfo.setText(movie.getInfo());
-        holder.sivPoster.setImageResource(movie.getPosterId());
+        holder.sivPoster.setImageResource(movie.getPosterId(holder.itemView.getContext()));
 
         holder.bBook.setOnClickListener(v -> {
             bookListener.onBookClick(movie);

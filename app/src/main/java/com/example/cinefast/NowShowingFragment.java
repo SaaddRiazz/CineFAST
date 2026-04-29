@@ -68,11 +68,7 @@ public class NowShowingFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_now_showing, container, false);
 
-        ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("The Dark Knight", "Action / 152 mins", R.drawable.the_dark_knight, "https://youtu.be/EXeTwQWrcwY", "now_showing"));
-        movies.add(new Movie("Inception", "Sci-Fi / 148 mins", R.drawable.inception, "https://youtu.be/YoHD9XEInc0", "now_showing"));
-        movies.add(new Movie("Interstellar", "Sci-Fi / 169 mins", R.drawable.interstellar, "https://youtu.be/zSWdZVtXT7E", "now_showing"));
-
+        ArrayList<Movie> movies = JSONParser.getMoviesFromJson(getContext(), "now_showing");
         RecyclerView rv = view.findViewById(R.id.rvNowShowing);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -89,7 +85,7 @@ public class NowShowingFragment extends Fragment {
             SeatSelectionFragment fragment = new SeatSelectionFragment();
             Bundle args = new Bundle();
             args.putString("movie_title_key", movie.getTitle());
-            args.putInt("movie_poster_key", movie.getPosterId());
+            args.putInt("movie_poster_key", movie.getPosterId(requireContext()));
             fragment.setArguments(args);
             ((MainActivity) requireActivity()).loadFragment(fragment, true);
         });
