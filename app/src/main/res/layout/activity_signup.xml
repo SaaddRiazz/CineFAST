@@ -1,118 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:id="@+id/main">
+    android:padding="24dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
-
         <Button
-            android:id="@+id/bBack"
+            android:id="@+id/bBackSignup"
             android:layout_width="60dp"
             android:layout_height="66dp"
             android:backgroundTint="#2F2F2F"
             android:layout_centerVertical="true"/>
-
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/back"
             android:layout_marginStart="18dp"
             android:layout_centerVertical="true"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:fontFamily="@font/poppins"
             android:text="Sign Up"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/poppins"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/poppins"
         android:text="Email"
         android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
-        android:textSize="16sp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/input_round_bg"
-        android:hint="youremail@example.com"
-        android:paddingLeft="16dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="#8E8E8E"
-        android:fontFamily="@font/poppins"
-        android:textSize="14sp"
-        android:inputType="textEmailAddress" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Password"
-        android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
         android:textSize="16sp" />
-
     <EditText
+        android:id="@+id/etEmailSignup"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/input_round_bg"
-        android:hint="••••••••••"
-        android:inputType="textPassword"
+        android:fontFamily="@font/poppins"
+        android:hint="youremail@example.com"
+        android:inputType="textEmailAddress"
         android:paddingLeft="16dp"
         android:textColor="@android:color/white"
         android:textColorHint="#8E8E8E"
-        android:fontFamily="@font/poppins"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Confirm password"
-        android:textColor="@android:color/white"
         android:fontFamily="@font/poppins"
+        android:text="Password"
+        android:textColor="@android:color/white"
         android:textSize="16sp" />
-
     <EditText
+        android:id="@+id/etPasswordSignup"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/input_round_bg"
+        android:fontFamily="@font/poppins"
         android:hint="••••••••••"
         android:inputType="textPassword"
         android:paddingLeft="16dp"
         android:textColor="@android:color/white"
         android:textColorHint="#8E8E8E"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins"
+        android:text="Confirm password"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/input_round_bg"
+        android:fontFamily="@font/poppins"
+        android:hint="••••••••••"
+        android:inputType="textPassword"
+        android:paddingLeft="16dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="#8E8E8E"
         android:textSize="14sp" />
 
     <Button
+        android:id="@+id/btnSignup"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="40dp"
         android:backgroundTint="#EE0000"
+        android:fontFamily="@font/poppins"
         android:text="Sign Up"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
         android:textSize="16sp"
         app:cornerRadius="12dp" />
 

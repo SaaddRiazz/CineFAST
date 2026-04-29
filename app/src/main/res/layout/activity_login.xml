@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:id="@+id/main">
+    android:padding="24dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -31,54 +31,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:fontFamily="@font/poppins"
             android:text="Log In"
             android:textColor="@android:color/white"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/poppins"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/poppins"
         android:text="Email"
         android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/input_round_bg"
+        android:fontFamily="@font/poppins"
         android:hint="Enter your email"
+        android:inputType="textEmailAddress"
         android:paddingLeft="16dp"
         android:textColor="@android:color/white"
         android:textColorHint="#8E8E8E"
-        android:fontFamily="@font/poppins"
         android:textSize="14sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins"
         android:text="Password"
         android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
         android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/input_round_bg"
+        android:fontFamily="@font/poppins"
         android:hint="Enter your password"
         android:inputType="textPassword"
         android:paddingLeft="16dp"
         android:textColor="@android:color/white"
         android:textColorHint="#8E8E8E"
-        android:fontFamily="@font/poppins"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -88,64 +91,67 @@
         android:gravity="center_vertical">
 
         <CheckBox
+            android:id="@+id/cbRememberMe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remember me"
-            android:textColor="@android:color/white"
             android:buttonTint="@android:color/holo_green_light"
             android:fontFamily="@font/poppins"
+            android:text="Remember me"
+            android:textColor="@android:color/white"
             android:textSize="12sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
+            android:id="@+id/tvForgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:text="Forgot password?"
             android:textColor="@android:color/white"
-            android:textSize="12sp"
-            android:fontFamily="@font/poppins" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="#EE0000"
+        android:fontFamily="@font/poppins"
         android:text="Log In"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:fontFamily="@font/poppins"
-        app:cornerRadius="12dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:cornerRadius="12dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="24dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:text="Don't have an account? "
             android:textColor="@android:color/white"
-            android:fontFamily="@font/poppins"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:text="Register"
             android:textColor="#0080FF"
-            android:textStyle="bold"
-            android:fontFamily="@font/poppins"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>
