@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:id="@+id/main">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/bBack"
+            android:layout_width="60dp"
+            android:layout_height="66dp"
+            android:backgroundTint="#2F2F2F"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/back"
+            android:layout_marginStart="18dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Log In"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Email"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/poppins"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/input_round_bg"
+        android:hint="Enter your email"
+        android:paddingLeft="16dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="#8E8E8E"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Password"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/poppins"
+        android:textSize="16sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/input_round_bg"
+        android:hint="Enter your password"
+        android:inputType="textPassword"
+        android:paddingLeft="16dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="#8E8E8E"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remember me"
+            android:textColor="@android:color/white"
+            android:buttonTint="@android:color/holo_green_light"
+            android:fontFamily="@font/poppins"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot password?"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#EE0000"
+        android:text="Log In"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/poppins"
+        app:cornerRadius="12dp"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account? "
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/poppins"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textColor="#0080FF"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+</LinearLayout>
