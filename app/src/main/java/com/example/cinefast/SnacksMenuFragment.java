@@ -86,11 +86,8 @@ public class SnacksMenuFragment extends Fragment {
             selectedSeats = getArguments().getStringArrayList("selected_seats_key");
         }
 
-        snacks = new ArrayList<>();
-        snacks.add(new Snack("Popcorn", "Large / Buttered", 8.99f, R.drawable.popcorn));
-        snacks.add(new Snack("Nachos", "With Cheese Dip", 7.99f, R.drawable.nachos));
-        snacks.add(new Snack("Soft Drinks", "Large / Any Flavor", 5.99f, R.drawable.drinks));
-        snacks.add(new Snack("Candy Mix", "Assorted Candies", 6.99f, R.drawable.candy));
+        SnackDatabaseHelper dbHelper = new SnackDatabaseHelper(requireContext());
+        snacks = dbHelper.getAllSnacks(requireContext());
 
         ListView lvSnacks = view.findViewById(R.id.lvSnacks);
 
