@@ -80,6 +80,7 @@ public class BookingFragment extends Fragment {
                         movieTitle,
                         moviePoster,
                         selectedSeats,
+                        selectedIndices,
                         totalPrice,
                         readableDate,
                         nextDayTimeMillis

@@ -72,14 +72,17 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                 .setTitle("Cancel Booking")
                 .setMessage("Are you sure you want to cancel this booking?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("bookings")
-                            .child(userId).child(booking.bookingId);
+                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference movieSeatsRef = dbRef.child("seats").child(booking.movieName);
+                    for (Integer index : booking.selectedIndices) {
+                        movieSeatsRef.child(String.valueOf(index)).setValue("available");
+                    }
 
-                    ref.removeValue().addOnSuccessListener(aVoid -> {
-                        Toast.makeText(context, "Booking Cancelled Successfully", Toast.LENGTH_SHORT).show();
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(context, "Failed to cancel", Toast.LENGTH_SHORT).show();
-                    });
+                    dbRef.child("bookings").child(userId).child(booking.bookingId)
+                            .removeValue()
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(context, "Booking Cancelled & Seats Released!", Toast.LENGTH_SHORT).show();
+                            });
                 })
                 .setNegativeButton("No", null)
                 .show();
