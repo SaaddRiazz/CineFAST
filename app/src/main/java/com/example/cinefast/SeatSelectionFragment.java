@@ -1,13 +1,8 @@
 package com.example.cinefast;
 
-import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,68 +11,34 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SeatSelectionFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SeatSelectionFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public SeatSelectionFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SeatSelectionFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SeatSelectionFragment newInstance(String param1, String param2) {
-        SeatSelectionFragment fragment = new SeatSelectionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_seat_selection, container, false);
-    }
-
-    private Button bBack, bBookConfirm, bSnacks;
 
     private String movieTitle;
     private int moviePoster;
+    private Button bBack, bBookConfirm, bSnacks;
+    private LinearLayout seatContainer;
+    private DatabaseReference seatRef;
+    private ArrayList<Integer> currentSelectedIndices = new ArrayList<>();
+
+    public SeatSelectionFragment() {}
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_seat_selection, container, false);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -89,167 +50,167 @@ public class SeatSelectionFragment extends Fragment {
         }
 
         init(view);
-        generateSeats(view);
-        updateButtonStates();
+
+        seatContainer.setOrientation(LinearLayout.VERTICAL);
+        seatContainer.setGravity(Gravity.CENTER);
+
+        seatRef = FirebaseDatabase.getInstance().getReference("seats").child(movieTitle);
+        loadSeatsFromFirebase();
     }
 
     private void init(View view) {
         bBack = view.findViewById(R.id.bBack);
         bBookConfirm = view.findViewById(R.id.bBookConfirm);
         bSnacks = view.findViewById(R.id.bSnacks);
+        seatContainer = view.findViewById(R.id.llSeatsCont);
 
         TextView tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         tvMovieTitle.setText(movieTitle);
 
-        bSnacks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SnacksMenuFragment fragment = new SnacksMenuFragment();
-                Bundle args = new Bundle();
-                args.putString("movie_title_key", movieTitle);
-                args.putInt("movie_poster_key", moviePoster);
-                args.putStringArrayList("selected_seats_key", ((MainActivity) requireActivity()).selectedSeats);
-                fragment.setArguments(args);
-                ((MainActivity) requireActivity()).loadFragment(fragment, true);
-            }
+        bSnacks.setOnClickListener(v -> {
+            SnacksMenuFragment fragment = new SnacksMenuFragment();
+            Bundle args = new Bundle();
+            args.putString("movie_title_key", movieTitle);
+            args.putInt("movie_poster_key", moviePoster);
+            args.putStringArrayList("selected_seats_key", ((MainActivity) requireActivity()).selectedSeats);
+            args.putIntegerArrayList("selected_indices_key", currentSelectedIndices);
+            fragment.setArguments(args);
+            ((MainActivity) requireActivity()).loadFragment(fragment, true);
         });
 
-        bBookConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BookingFragment fragment = new BookingFragment();
-                Bundle args = new Bundle();
-                args.putString("movie_title_key", movieTitle);
-                args.putInt("movie_poster_key", moviePoster);
-                args.putStringArrayList("selected_seats_key", ((MainActivity) requireActivity()).selectedSeats);
-                fragment.setArguments(args);
-                ((MainActivity) requireActivity()).loadFragment(fragment, true);
-            }
+        bBookConfirm.setOnClickListener(v -> {
+            BookingFragment fragment = new BookingFragment();
+            Bundle args = new Bundle();
+            args.putString("movie_title_key", movieTitle);
+            args.putInt("movie_poster_key", moviePoster);
+            args.putStringArrayList("selected_seats_key", ((MainActivity) requireActivity()).selectedSeats);
+            args.putIntegerArrayList("selected_indices_key", currentSelectedIndices);
+            fragment.setArguments(args);
+            ((MainActivity) requireActivity()).loadFragment(fragment, true);
         });
 
-        bBack.setOnClickListener(new View.OnClickListener() {
+        bBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+    }
+
+    private void loadSeatsFromFirebase() {
+        seatRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                requireActivity().getSupportFragmentManager().popBackStack();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    generateInitialSeatsInFirebase();
+                } else {
+                    ArrayList<String> states = new ArrayList<>();
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        states.add(child.getValue(String.class));
+                    }
+                    renderSeatUI(states);
+                }
+                updateButtonStates();
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
-    private void generateSeats(View view) {
-
-        LinearLayout seatContainer = view.findViewById(R.id.llSeatsCont);
-        seatContainer.setOrientation(LinearLayout.VERTICAL);
-        seatContainer.setGravity(Gravity.CENTER);
-
-
-        float density = getResources().getDisplayMetrics().density;
-        int seatSize = (int) (36 * density);
-
+    private void generateInitialSeatsInFirebase() {
         int totalSeats = 0;
-        int seatIndex = 0;
-
         for (char row = 'H'; row >= 'A'; row--) {
             totalSeats += (row == 'A' || row == 'H') ? 6 : 8;
         }
 
-        String[] bookedStates = ((MainActivity) requireActivity()).getSeatStates(movieTitle, totalSeats);
+        java.util.Map<String, Object> initialSeats = new java.util.HashMap<>();
+        Random random = new Random();
+
+        for (int i = 0; i < totalSeats; i++) {
+            String state = (random.nextInt(100) < 20) ? "booked" : "available";
+            initialSeats.put(String.valueOf(i), state);
+        }
+
+        seatRef.updateChildren(initialSeats);
+    }
+
+    private void renderSeatUI(ArrayList<String> states) {
+        seatContainer.removeAllViews();
+        float density = getResources().getDisplayMetrics().density;
+        int seatSize = (int) (36 * density);
+        int seatIndex = 0;
 
         for (char row = 'H'; row >= 'A'; row--) {
-
             LinearLayout rowLayout = new LinearLayout(getContext());
             rowLayout.setOrientation(LinearLayout.HORIZONTAL);
             rowLayout.setGravity(Gravity.CENTER);
 
-            LinearLayout.LayoutParams rowParams =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
+            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
             rowLayout.setLayoutParams(rowParams);
 
             int seatCount = (row == 'A' || row == 'H') ? 6 : 8;
 
             for (int seatNum = 1; seatNum <= seatCount; seatNum++) {
-                int margin = 1;
-                if(seatNum==seatCount/2)
-                    margin = 100;
+                int margin = (seatNum == seatCount / 2) ? 100 : 1;
                 SeatButton seat = new SeatButton(getContext());
 
-                LinearLayout.LayoutParams seatParams =
-                        new LinearLayout.LayoutParams(seatSize, seatSize);
+                LinearLayout.LayoutParams seatParams = new LinearLayout.LayoutParams(seatSize, seatSize);
                 seatParams.setMarginEnd(margin);
                 seat.setLayoutParams(seatParams);
 
                 seat.setRow(String.valueOf(row));
                 seat.setSeatNumber(seatNum);
 
-                String status = bookedStates[seatIndex++];
-                seat.setStatus(status);
+                String seatLabel = "Row " + row + ", Seat " + seatNum;
+                int finalSeatIndex = seatIndex;
+                String status = states.get(seatIndex);
 
-                if (Objects.equals(status, "booked"))
-                    seat.setImageResource(R.drawable.unavailable_seat);
-                else if (Objects.equals(status, "available"))
-                    seat.setImageResource(R.drawable.available_seat);
-                else
+                if (currentSelectedIndices.contains(finalSeatIndex)) {
+                    seat.setStatus("selected");
                     seat.setImageResource(R.drawable.your_seat);
+                } else if (status.equals("booked")) {
+                    seat.setStatus("booked");
+                    seat.setImageResource(R.drawable.unavailable_seat);
+                } else {
+                    seat.setStatus("available");
+                    seat.setImageResource(R.drawable.available_seat);
+                }
 
                 seat.setBackgroundColor(Color.TRANSPARENT);
 
-                int finalSeatIndex = seatIndex - 1;
                 seat.setOnClickListener(v -> {
-                    if(Objects.equals(seat.getStatus(), "available")){
-                        ((MainActivity) requireActivity()).selectSeat(movieTitle, finalSeatIndex);
-                        seat.setStatus("selected");
-                        seat.setImageResource(R.drawable.your_seat);
-                        ((MainActivity) requireActivity()).selectedSeats.add("Row "+seat.getRow()+", Seat "+seat.getSeatNumber());
+                    if (status.equals("available")) {
+                        if (!currentSelectedIndices.contains(finalSeatIndex)) {
+                            currentSelectedIndices.add(finalSeatIndex);
+                            ((MainActivity) requireActivity()).selectedSeats.add(seatLabel);
+                            seat.setImageResource(R.drawable.your_seat);
+                        } else {
+                            currentSelectedIndices.remove(Integer.valueOf(finalSeatIndex));
+                            ((MainActivity) requireActivity()).selectedSeats.remove(seatLabel);
+                            seat.setImageResource(R.drawable.available_seat);
+                        }
+                        updateButtonStates();
                     }
-                    else if(Objects.equals(seat.getStatus(), "selected")){
-                        ((MainActivity) requireActivity()).deselectSeat(movieTitle, finalSeatIndex);
-                        seat.setStatus("available");
-                        seat.setImageResource(R.drawable.available_seat);
-                        ((MainActivity) requireActivity()).selectedSeats.remove("Row "+seat.getRow()+", Seat "+seat.getSeatNumber());
-                    }
-
-                    updateButtonStates();
                 });
 
                 rowLayout.addView(seat);
+                seatIndex++;
             }
-
             seatContainer.addView(rowLayout);
         }
     }
 
-    private void updateButtonStates(){
-        if(!((MainActivity) requireActivity()).selectedSeats.isEmpty()){
-            bBookConfirm.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(
-                            android.graphics.Color.parseColor("#EE0000")
-                    )
-            );
-            bBookConfirm.setTextColor(android.graphics.Color.parseColor("#FFFFFF"));
-            bSnacks.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(
-                            android.graphics.Color.parseColor("#FFFFFF")
-                    )
-            );
+    private void updateButtonStates() {
+        boolean hasSelection = !currentSelectedIndices.isEmpty();
 
+        if (hasSelection) {
+            bBookConfirm.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EE0000")));
+            bBookConfirm.setTextColor(Color.parseColor("#FFFFFF"));
+            bSnacks.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFFFFF")));
             bBookConfirm.setEnabled(true);
             bSnacks.setEnabled(true);
-        }
-        else{
-            bBookConfirm.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(
-                            android.graphics.Color.parseColor("#590909")
-                    )
-            );
-            bBookConfirm.setTextColor(android.graphics.Color.parseColor("#767676"));
-            bSnacks.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(
-                            android.graphics.Color.parseColor("#474747")
-                    )
-            );
-
+        } else {
+            bBookConfirm.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#590909")));
+            bBookConfirm.setTextColor(Color.parseColor("#767676"));
+            bSnacks.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#474747")));
             bBookConfirm.setEnabled(false);
             bSnacks.setEnabled(false);
         }
@@ -258,7 +219,6 @@ public class SeatSelectionFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((MainActivity) requireActivity()).clearSelectedSeats(movieTitle);
         ((MainActivity) requireActivity()).selectedSeats.clear();
     }
 }

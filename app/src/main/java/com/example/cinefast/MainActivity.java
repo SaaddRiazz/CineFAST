@@ -17,15 +17,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
-    HashMap<String, String[]> seatBookingMap = new HashMap<>();
     ArrayList<String> selectedSeats = new ArrayList<>();
     ArrayList<SnacksCardView> selectedSnacks = new ArrayList<>();
 
@@ -34,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        Toast.makeText(this, "Welcome, User!", Toast.LENGTH_SHORT).show();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -53,13 +53,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home) {
             loadFragment(new HomeFragment(), false);
-            selectedSeats.clear();
-            selectedSnacks.clear();
-            for (String key : seatBookingMap.keySet()) {
-                clearSelectedSeats(key);
-            }
+            clearSelectionData();
         } else if (id == R.id.nav_bookings) {
-            Toast.makeText(this, "Bookings page hai bharosa rakho", Toast.LENGTH_SHORT).show();
+            showLastBookingDialog();
         } else if (id == R.id.nav_logout) {
             performLogout();
         }
@@ -68,12 +64,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    public void clearSelectionData() {
+        selectedSeats.clear();
+        selectedSnacks.clear();
+    }
+
     private void performLogout() {
         FirebaseAuth.getInstance().signOut();
-        SharedPreferences sharedPreferences = getSharedPreferences("Login Preferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        SharedPreferences sharedPreferences = getSharedPreferences("cinefast_session_pref_v3", MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
 
         Intent intent = new Intent(MainActivity.this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -88,49 +87,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.commit();
     }
 
-    public String[] getSeatStates(String movieTitle, int totalSeats) {
-        if (!seatBookingMap.containsKey(movieTitle)) {
-            String[] states = new String[totalSeats];
-            Random random = new Random();
-            for (int i = 0; i < totalSeats; i++) {
-                states[i] = random.nextInt(100) < 20 ? "booked" : "available";
-            }
-            seatBookingMap.put(movieTitle, states);
-        }
-        return seatBookingMap.get(movieTitle);
-    }
-
-    public void selectSeat(String movieTitle, int index) {
-        String[] states = seatBookingMap.get(movieTitle);
-        if (states != null && index < states.length) {
-            states[index] = "selected";
-        }
-    }
-
-    public void deselectSeat(String movieTitle, int index) {
-        String[] states = seatBookingMap.get(movieTitle);
-        if (states != null && index < states.length) {
-            states[index] = "available";
-        }
-    }
-
-    public void finalizeBooking(String movieTitle) {
-        String[] states = seatBookingMap.get(movieTitle);
-        if (states != null) {
-            for (int i = 0; i < states.length; i++) {
-                if (states[i].equals("selected")) {
-                    states[i] = "booked";
-                }
-            }
-        }
-    }
-
-    public void clearSelectedSeats(String movieTitle) {
-        String[] states = seatBookingMap.get(movieTitle);
-        if (states != null) {
-            for (int i = 0; i < states.length; i++) {
-                if (states[i].equals("selected")) states[i] = "available";
-            }
+    public void finalizeBooking(String movieTitle, List<Integer> selectedIndices) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("seats").child(movieTitle);
+        for (Integer index : selectedIndices) {
+            dbRef.child(String.valueOf(index)).setValue("booked");
         }
     }
 
@@ -155,13 +115,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             int seats = prefs.getInt("last_seat_count", 0);
             float price = prefs.getFloat("last_total_price", 0.0f);
-
-            String message = "Movie: " + movie + "\n" +
-                    "Seats: " + seats + "\n" +
-                    "Total Price: $" + String.format("%.2f", price);
-            builder.setMessage(message);
+            builder.setMessage("Movie: " + movie + "\nSeats: " + seats + "\nTotal: $" + String.format("%.2f", price));
         }
-
         builder.setPositiveButton("OK", null);
         builder.show();
     }
