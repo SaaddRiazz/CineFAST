@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void performLogout() {
         FirebaseAuth.getInstance().signOut();
-        SharedPreferences sharedPreferences = getSharedPreferences("cinefast_session_pref_v3", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Login Preferences", MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
 
         Intent intent = new Intent(MainActivity.this, Login.class);
