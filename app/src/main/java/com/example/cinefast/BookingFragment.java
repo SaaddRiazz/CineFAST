@@ -73,8 +73,17 @@ public class BookingFragment extends Fragment {
             String userId = FirebaseAuth.getInstance().getUid();
 
             if (userId != null) {
-                String timestamp = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
-                Booking booking = new Booking(movieTitle, selectedSeats, totalPrice, timestamp);
+                long nextDayTimeMillis = System.currentTimeMillis() + 24 * 60 * 60 * 1000L;
+                String readableDate = java.text.DateFormat.getDateTimeInstance().format(new java.util.Date(nextDayTimeMillis));
+
+                Booking booking = new Booking(
+                        movieTitle,
+                        moviePoster,
+                        selectedSeats,
+                        totalPrice,
+                        readableDate,
+                        nextDayTimeMillis
+                );
 
                 DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 

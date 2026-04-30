@@ -96,6 +96,9 @@ public class SeatSelectionFragment extends Fragment {
         seatRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded() || getContext() == null) {
+                    return;
+                }
                 if (!snapshot.exists()) {
                     generateInitialSeatsInFirebase();
                 } else {

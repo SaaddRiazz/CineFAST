@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             loadFragment(new HomeFragment(), false);
             clearSelectionData();
         } else if (id == R.id.nav_bookings) {
-            showLastBookingDialog();
+            loadFragment(new BookingHistoryFragment(), true);
         } else if (id == R.id.nav_logout) {
             performLogout();
         }
